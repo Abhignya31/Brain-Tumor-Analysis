@@ -1,0 +1,22 @@
+[
+    {
+        "filename": "Tr-pi_0018.jpg",
+        "predicted_class": "pituitary"
+    },
+    {
+        "filename": "Tr-me_0012.jpg",
+        "predicted_class": "meningioma"
+    },
+    {
+        "filename": "Tr-me_0020.jpg",
+        "predicted_class": "meningioma"
+    },
+    {
+        "filename": "Tr-me_0019.jpg",
+        "predicted_class": "meningioma"
+    },
+    {
+        "filename": "Tr-me_0019.jpg",
+        "predicted_class": "meningioma"
+    }
+]

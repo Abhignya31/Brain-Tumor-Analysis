@@ -1,0 +1,109 @@
+cated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Downloading: "https://download.pytorch.org/models/alexnet-owt-7be5be79.pth" to C:\Users\Alekhya/.cache\torch\hub\checkpoints\alexnet-owt-7be5be79.pth
+100%|█████████████████████████████████████████████████████████████████████████████████| 233M/233M [01:19<00:00, 3.07MB/s]       
+Epoch 0/24
+----------
+train Loss: 0.4253 Acc: 0.8430
+val Loss: 0.3460 Acc: 0.8795
+Epoch 1/24
+----------
+train Loss: 0.2267 Acc: 0.9175
+val Loss: 0.2418 Acc: 0.9039
+Epoch 2/24
+----------
+train Loss: 0.1549 Acc: 0.9459
+val Loss: 0.1177 Acc: 0.9603
+Epoch 3/24
+----------
+train Loss: 0.1108 Acc: 0.9615
+val Loss: 0.1415 Acc: 0.9420
+Epoch 4/24
+----------
+train Loss: 0.0982 Acc: 0.9645
+val Loss: 0.1839 Acc: 0.9321
+Epoch 5/24
+----------
+train Loss: 0.0801 Acc: 0.9720
+val Loss: 0.0925 Acc: 0.9680
+Epoch 6/24
+----------
+train Loss: 0.0664 Acc: 0.9755
+val Loss: 0.0526 Acc: 0.9825
+Epoch 7/24
+----------
+train Loss: 0.0464 Acc: 0.9825
+val Loss: 0.0721 Acc: 0.9741
+Epoch 8/24
+----------
+train Loss: 0.0472 Acc: 0.9835
+val Loss: 0.0532 Acc: 0.9825
+Epoch 9/24
+----------
+train Loss: 0.0402 Acc: 0.9853
+val Loss: 0.0541 Acc: 0.9832
+Epoch 10/24
+----------
+train Loss: 0.0356 Acc: 0.9883
+val Loss: 0.0445 Acc: 0.9878
+Epoch 11/24
+----------
+train Loss: 0.0222 Acc: 0.9933
+val Loss: 0.0876 Acc: 0.9748
+Epoch 12/24
+----------
+train Loss: 0.0315 Acc: 0.9897
+val Loss: 0.0455 Acc: 0.9893
+Epoch 13/24
+----------
+train Loss: 0.0150 Acc: 0.9954
+val Loss: 0.0668 Acc: 0.9863
+Epoch 14/24
+----------
+train Loss: 0.0188 Acc: 0.9937
+val Loss: 0.0829 Acc: 0.9756
+Epoch 15/24
+----------
+train Loss: 0.0110 Acc: 0.9972
+val Loss: 0.1351 Acc: 0.9710
+Epoch 16/24
+----------
+train Loss: 0.0200 Acc: 0.9930
+val Loss: 0.0482 Acc: 0.9886
+Epoch 17/24
+----------
+train Loss: 0.0118 Acc: 0.9960
+val Loss: 0.0493 Acc: 0.9886
+Epoch 18/24
+----------
+train Loss: 0.0096 Acc: 0.9972
+val Loss: 0.0548 Acc: 0.9855
+Epoch 19/24
+----------
+train Loss: 0.0161 Acc: 0.9954
+val Loss: 0.0968 Acc: 0.9741
+Epoch 20/24
+----------
+train Loss: 0.0093 Acc: 0.9967
+val Loss: 0.0440 Acc: 0.9916
+Epoch 21/24
+----------
+train Loss: 0.0084 Acc: 0.9974
+val Loss: 0.0605 Acc: 0.9847
+Epoch 22/24
+----------
+train Loss: 0.0083 Acc: 0.9975
+val Loss: 0.0419 Acc: 0.9916
+Epoch 23/24
+----------
+train Loss: 0.0055 Acc: 0.9975
+val Loss: 0.0414 Acc: 0.9908
+Epoch 24/24
+----------
+train Loss: 0.0110 Acc: 0.9968
+val Loss: 0.0360 Acc: 0.9924
+Training complete in 102m 15s
+Best val Acc: 0.9924
+PS C:\Users\Alekhya\OneDrive\Desktop\BTC-Alexnet> 
+PS C:\Users\Alekhya\OneDrive\Desktop\BTC-Alexnet>
+PS C:\Users\Alekhya\OneDrive\Desktop\BTC-Alexnet>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Symptom Diagnostic Tool 🩺</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div id="app" class="container mx-auto py-8">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold">Symptoms Diagnostic Tool 🩺</h1>
+      </div>
+
+      <div class="max-w-4xl mx-auto">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <div class="mb-4 h-96 overflow-auto p-4" ref="scrollContainer">
+            <div
+              v-for="(message, index) in messages"
+              :key="index"
+              class="flex items-start gap-3 mb-4"
+            >
+              <div class="w-full p-4 rounded-lg shadow-sm">
+                <div
+                  v-if="message.sender === 'ai'"
+                  class="bg-blue-100 p-2 rounded-lg flex justify-between items-center"
+                >
+                  <p v-for="line in message.content.split('\n')" :key="line">
+                    {{ line }}
+                  </p>
+                </div>
+                <div
+                  v-if="message.sender === 'user'"
+                  class="bg-green-100 text-black p-2 rounded-lg"
+                >
+                  <p v-for="line in message.content.split('\n')" :key="line">
+                    {{ line }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="!isStarted">
+            <button
+              @click="handleStart"
+              class="w-full bg-blue-500 text-white py-2 rounded-lg"
+            >
+              Start Test
+            </button>
+          </div>
+
+          <div v-else>
+            <div
+              v-if="step < questions.length"
+              class="flex justify-center gap-2"
+            >
+              <button
+                v-for="i in 10"
+                :key="i"
+                :disabled="isLoading"
+                class="w-12 h-12 bg-gray-300 hover:bg-gray-400 rounded-full"
+                @click="handleResponse(i - 1)"
+              >
+                {{ i - 1 }}
+              </button>
+            </div>
+
+            <div v-if="isLoading" class="text-center mt-4">
+              <div
+                class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"
+              ></div>
+            </div>
+          </div>
+
+          <div v-if="step === questions.length" class="mt-4">
+            <button
+              @click="restartTest"
+              class="w-full bg-blue-500 text-white py-2 rounded-lg"
+            >
+              Restart Test
+            </button>
+            <!-- Medical Chatbot Redirect Button -->
+            <button
+              @click="redirectToChatbot"
+              class="w-full bg-green-500 text-white py-2 mt-4 rounded-lg"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data() {
+          return {
+            questions: [
+              "Have you experienced persistent headaches?",
+              "Do you have any sudden vision changes, such as blurriness or double vision?",
+              "Are you feeling nauseous or vomiting frequently without any known cause?",
+              "Have you noticed any sudden changes in your balance or coordination?",
+              "Are you experiencing seizures or convulsions?",
+              "Do you have difficulty speaking or understanding speech?",
+              "Have you had any numbness or weakness in your limbs?",
+              "Are you having trouble with memory or concentration?",
+              "Have you experienced any sudden mood swings or personality changes?",
+              "Are you feeling unusually drowsy or lethargic during the day?",
+              "Do you have trouble walking or maintaining your posture?",
+              "Have you noticed any changes in your sense of smell or taste?",
+              "Are you having difficulty hearing or ringing in your ears?",
+              "Do you feel a sense of pressure or fullness in your head?",
+              "Have you experienced any unusual episodes of confusion or disorientation?",
+            ],
+
+            messages: [
+              {
+                content: "Hi! Welcome to the Symptoms Analyser.",
+                sender: "ai",
+              },
+              {
+                content:
+                  "I will ask you 15 questions. Please rate each on a scale of 0 to 9. Based on your responses, we'll assess your condition.",
+                sender: "ai",
+              },
+            ],
+            userResponses: [],
+            isStarted: false,
+            isLoading: false,
+            step: 0,
+          };
+        },
+        methods: {
+          handleStart() {
+            this.isStarted = true;
+            this.showQuestion();
+          },
+          handleResponse(response) {
+            this.userResponses.push(response);
+            this.messages.push({
+              content: `You selected: ${response}`,
+              sender: "user",
+            });
+            this.isLoading = true;
+
+            setTimeout(() => {
+              this.step++;
+              if (this.step < this.questions.length) {
+                this.showQuestion();
+              } else {
+                this.showResult();
+              }
+              this.isLoading = false;
+
+              // Automatically scroll to the latest message
+              this.$nextTick(() => {
+                const container = this.$refs.scrollContainer;
+                container.scrollTop = container.scrollHeight;
+              });
+            }, 2000); // Simulated delay for loading
+          },
+          showQuestion() {
+            this.messages.push({
+              content: `Question ${this.step + 1}: ${
+                this.questions[this.step]
+              }`,
+              sender: "ai",
+            });
+
+            this.speakQuestion(this.questions[this.step]);
+
+            // Automatically scroll to the latest message
+            this.$nextTick(() => {
+              const container = this.$refs.scrollContainer;
+              container.scrollTop = container.scrollHeight;
+            });
+          },
+          speakQuestion(question) {
+            const utterance = new SpeechSynthesisUtterance(question);
+            speechSynthesis.speak(utterance);
+          },
+          showResult() {
+            const totalScore = this.userResponses.reduce(
+              (sum, score) => sum + score,
+              0
+            );
+            const maxScore = 9 * this.questions.length;
+            const percentage = (totalScore / maxScore) * 100;
+            const category = this.getScoreCategory(percentage);
+
+            // Check if headache, vision changes, seizures, nausea/vomiting, memory problems, balance problems, and numbness are all more than 7
+            const headacheScore = this.userResponses[0]; // Headache is the first question
+            const visionScore = this.userResponses[1]; // Vision is the second question
+            const seizureScore = this.userResponses[4]; // Seizure is the fifth question
+            const nauseaScore = this.userResponses[2]; // Nausea/Vomiting is the third question
+            const memoryScore = this.userResponses[3]; // Memory problems are the fourth question
+            const balanceScore = this.userResponses[5]; // Balance problems are the sixth question
+            const numbnessScore = this.userResponses[6]; // Numbness is the seventh question
+
+            if (
+              headacheScore > 6 &&
+              visionScore > 6 &&
+              seizureScore > 6 &&
+              nauseaScore > 6 &&
+              memoryScore > 6 &&
+              balanceScore > 6 &&
+              numbnessScore > 6
+            ) {
+              this.messages.push({
+                content:
+                  "⚠️ Based on your responses, it is strongly advised to consult a doctor immediately. The combination of severe headaches, vision changes, seizures, nausea/vomiting, memory problems, balance issues, and numbness could indicate a serious health concern.",
+                sender: "ai",
+              });
+            }
+
+            this.messages.push(
+              { content: `Your total score is: ${totalScore}`, sender: "ai" },
+              {
+                content: `Your percentage score is: ${percentage.toFixed(2)}%`,
+                sender: "ai",
+              },
+              { content: `Category: ${category}`, sender: "ai" },
+              {
+                content: `⚕️ Reason for Score: ${this.getReason(percentage)}`,
+                sender: "ai",
+              },
+              {
+                content: `💊 Medication Recommendations: ${this.getMedicationRecommendation(
+                  percentage
+                )}`,
+                sender: "ai",
+              },
+              {
+                content: `🏃‍♂️ Recommended Exercises: ${this.getExerciseRecommendation(
+                  percentage
+                )}`,
+                sender: "ai",
+              }
+            );
+
+            // Automatically scroll to the latest message
+            this.$nextTick(() => {
+              const container = this.$refs.scrollContainer;
+              container.scrollTop = container.scrollHeight;
+            });
+          },
+          getScoreCategory(percentage) {
+            if (percentage < 20) return "Very Low";
+            if (percentage >= 20 && percentage < 40) return "Low";
+            if (percentage >= 40 && percentage < 60) return "Medium";
+            if (percentage >= 60 && percentage < 80) return "High";
+            return "Very High";
+          },
+          getReason(percentage) {
+            if (percentage < 20)
+              return "No medication is necessary at this time. Focus on maintaining a healthy lifestyle.";
+            if (percentage >= 20 && percentage < 40)
+              return "Consider over-the-counter medication, but consult with a healthcare provider.";
+            if (percentage >= 40 && percentage < 60)
+              return "Consult with a healthcare provider for possible treatment options.";
+            if (percentage === 60)
+              return "Consult a doctor immediately for brain tumor evaluation.";
+            if (percentage > 60 && percentage < 80)
+              return "Immediate consultation is recommended.";
+            return "Urgent medical care is advised. Seek help immediately.";
+          },
+
+          getMedicationRecommendation(percentage) {
+            const [
+              headacheScore,
+              visionScore,
+              nauseaScore,
+              memoryScore,
+              balanceScore,
+              seizureScore,
+              numbnessScore,
+            ] = this.userResponses;
+
+            // If all critical symptoms exceed thresholds, recommend urgent doctor consultation
+            if (
+              headacheScore >= 6 &&
+              visionScore >= 6 &&
+              nauseaScore >= 6 &&
+              memoryScore >= 6 &&
+              balanceScore >= 6 &&
+              seizureScore >= 5 &&
+              numbnessScore >= 5
+            ) {
+              return "Your symptoms collectively indicate a potentially serious health concern, such as neurological issues or brain-related conditions. Early diagnosis and treatment are essential to prevent complications. Please consult a doctor immediately without delay.";
+            }
+
+            // If headacheScore alone is >= 6
+            if (headacheScore >= 6) {
+              return "Frequent or intense headaches may indicate an underlying condition like migraines or other neurological issues. It’s important to consult a healthcare provider for a thorough evaluation and appropriate treatment.";
+            }
+
+            // Messages based on percentage severity
+            if (percentage < 20) {
+              return "Currently, no medication is necessary based on your symptoms. Focus on maintaining a healthy lifestyle that includes balanced nutrition, proper hydration, regular physical activity, and adequate sleep. If your symptoms persist, monitor them closely and consult a healthcare provider if they worsen.";
+            }
+
+            if (percentage >= 20 && percentage < 40) {
+              return "Your symptoms suggest mild discomfort, and over-the-counter medications, such as pain relievers (acetaminophen or ibuprofen), may help alleviate the issues. However, it’s recommended to consult with a healthcare provider to ensure that these medications are appropriate for your condition. Monitoring your symptoms is key at this stage.";
+            }
+
+            if (percentage >= 40 && percentage < 60) {
+              return "Your symptoms are moderate and may require medical attention. It’s advisable to consult a healthcare professional to explore possible treatment options, such as prescription medications or therapies, to address the underlying causes. Early intervention at this stage can prevent symptoms from escalating further.";
+            }
+
+            if (percentage >= 60 && percentage < 80) {
+              return "Your symptoms are significant and require prompt medical attention. Immediate consultation with a healthcare provider is recommended to identify the cause and begin appropriate treatment. This may include stronger medications, diagnostic tests, or specialized therapies depending on the underlying condition.";
+            }
+
+            return "Your symptoms are critical and suggest a serious medical condition that demands urgent attention. Seek emergency medical care immediately to ensure timely diagnosis and treatment. Delaying care in such cases could lead to severe complications or life-threatening situations.";
+          },
+
+          getExerciseRecommendation(percentage) {
+            if (percentage < 20)
+              return "Stay active with regular walks or light exercises.";
+            if (percentage >= 20 && percentage < 40)
+              return "Gentle stretching or yoga exercises may help improve flexibility and relieve discomfort.";
+            if (percentage >= 40 && percentage < 60)
+              return "Consider low-impact exercises like swimming, cycling, or walking.";
+            if (percentage >= 60 && percentage < 80)
+              return "Consult a healthcare provider before starting any exercise program. A tailored rehabilitation plan may be beneficial.";
+            return "Avoid strenuous physical activity. Rest and seek medical consultation for tailored guidance.";
+          },
+          redirectToChatbot() {
+            window.location.href = "https://www.example-chatbot.com";
+          },
+          restartTest() {
+            this.isStarted = false;
+            this.step = 0;
+            this.messages = [
+              {
+                content: "Hi! Welcome to the Symptoms Analyser.",
+                sender: "ai",
+              },
+              {
+                content:
+                  "I will ask you 15 questions. Please rate each on a scale of 0 to 9. Based on your responses, we'll assess your condition.",
+                sender: "ai",
+              },
+            ];
+            this.userResponses = [];
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
