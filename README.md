@@ -72,29 +72,49 @@ https://www.kaggle.com/
   "accuracy": "High (Experimental Results)"
 }
 
- 🌐 Web Application (Streamlit)
+```
+🌐 Web Application (Streamlit)
+
 🔧 Installation
+
 pip install -r requirements.txt
+
 streamlit run app.py
 
+
 🖥️ Features
+
 🧠 Brain Tumor Analyzer
+
 Upload MRI image
+
 Detect tumor presence
+
 Classify tumor type
+
 Highlight affected region
 
+
 🔥 Visualization
+
 Grad-CAM heatmaps
+
 Region highlighting for interpretability
 
 🧩 Segmentation
+
 V-Net based tumor boundary detection
+
 Region extraction for severity analysis
 
+
+
 💬 Medical Chatbot
+
 Answers queries about tumors
+
 Suggests treatments
+
 Provides hospital recommendations
 
 
@@ -107,20 +127,34 @@ brain-tumor-analysis/
 │── images/
 │── README.md
 
+
+
 📊 Results
+
 High classification accuracy
+
 Accurate tumor localization
+
 Improved interpretability using Grad-CAM
+
 Reliable segmentation with V-Net
 
+
 🚀 Future Work
+
 Deploy on cloud
+
 Improve segmentation accuracy
+
 Add real-time clinical integration
 
+
 👩‍💻 Authors
+
 S ABHIGNYA
+
 D SHUBHANG
+
 
 📜 License
 
